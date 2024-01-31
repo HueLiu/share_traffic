@@ -1,0 +1,89 @@
+version: "3"
+services:
+  share_traffic:
+    image: "harleyliu/share_traffic:latest"
+    build: .
+    tty: true
+    privileged: true
+    ports:
+      - $MESON_PORT:$MESON_PORT
+      - $SUPERVISOR_PROT:9001
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - DEVICE_NAME=$DEVICE_NAME
+      - EARNAPP_UUID=$EARNAPP_DEVICE_ID
+      - EARNFM_TOKEN=$EARNFM_TOKEN
+      - GAGANODE_TOKEN=$GAGANODE_TOKEN
+      - HONEYGAIN_EMAIL=$HONEYGAIN_EMAIL
+      - HONEYGAIN_PASSWD=$HONEYGAIN_PASSWD
+      - IPROYALPAWNS_EMAIL=$IPROYALPAWNS_EMAIL
+      - IPROYALPAWNS_PASSWD=$IPROYALPAWNS_PASSWD
+      - MESON_TOKEN=$MESON_TOKEN
+      - MESON_PORT=$MESON_PORT
+      - CID=$PACKETSTREAM_CID
+      - PEER2PROFIT_EMAIL=$PEER2PROFIT_EMAIL
+      - PROXYLITE_USER_ID=$PROXYLITE_USER_ID
+      - PROXYRACK_UUID=$PROXYRACK_UUID
+      - SPEEDSHARE_TOKEN=$SPEEDSHARE_TOKEN
+    volumes:
+      - ./data/bitpingd:/root/.bitpingd
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.10
+
+  firefox:
+    image: jlesage/firefox:latest
+    restart: always
+    environment:
+      - FF_OPEN_URL=https://adnade.net/ptp/?user=$ADNADE_USERNAME
+      - WEB_LISTENING_PORT=$FIREFOX_PROT
+      - VNC_LISTENING_PORT=-1
+    volumes:
+      - ./data/ebescher/config:/config:rw
+    ports:
+      - $FIREFOX_PROT:$FIREFOX_PROT
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.20
+
+  # mysterium:
+  #   image: mysteriumnetwork/myst:latest
+  #   restart: always
+  #   environment:
+  #     - MYSTNODE_DUMMY=$MYSTNODE_API_KEY
+  #   command: service --agreed-terms-and-conditions
+  #   cap_add:
+  #     - NET_ADMIN
+  #   ports:
+  #     - 4449:4449
+  #   volumes:
+  #     - ./data/mysterium-node:/var/lib/mysterium-node
+  #   networks:
+  #     share_traffic:
+  #       ipv4_address: 172.106.0.30
+
+  Repocket:
+    image: repocket/repocket:latest
+    restart: always
+    environment:
+      - RP_EMAIL=$REPOCKET_EMAIL
+      - RP_API_KEY=$REPOCKET_API_KEY
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.40
+
+  TraffMonetizer:
+    image: traffmonetizer/cli_v2:latest
+    restart: always
+    command: start accept --token ${TRAFFMONETIZER_TOKEN}
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.50
+
+networks:
+    share_traffic:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.106.0.0/16

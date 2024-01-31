@@ -1,0 +1,69 @@
+version: "3"
+services:
+  share_traffic:
+    image: "harleyliu/share_traffic:latest"
+    build: .
+    tty: true
+    privileged: true
+    ports:
+      - $MESON_PORT:$MESON_PORT
+      - $SUPERVISOR_PROT:9001
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - DEVICE_NAME=$DEVICE_NAME
+      - EARNAPP_UUID=$EARNAPP_DEVICE_ID
+      - EARNFM_TOKEN=$EARNFM_TOKEN
+      - GAGANODE_TOKEN=$GAGANODE_TOKEN
+      - HONEYGAIN_EMAIL=$HONEYGAIN_EMAIL
+      - HONEYGAIN_PASSWD=$HONEYGAIN_PASSWD
+      - IPROYALPAWNS_EMAIL=$IPROYALPAWNS_EMAIL
+      - IPROYALPAWNS_PASSWD=$IPROYALPAWNS_PASSWD
+      - MESON_TOKEN=$MESON_TOKEN
+      - MESON_PORT=$MESON_PORT
+      - CID=$PACKETSTREAM_CID
+      - PEER2PROFIT_EMAIL=$PEER2PROFIT_EMAIL
+      - PROXYLITE_USER_ID=$PROXYLITE_USER_ID
+      - PROXYRACK_UUID=$PROXYRACK_UUID
+      - SPEEDSHARE_TOKEN=$SPEEDSHARE_TOKEN
+    volumes:
+      - ./data/bitping:/root/.bitping
+    network_mode: service:tun2socks
+
+  firefox:
+    image: jlesage/firefox:latest
+    restart: always
+    environment:
+      - FF_OPEN_URL=https://adnade.net/ptp/?user=$ADNADE_USERNAME
+      - WEB_LISTENING_PORT=$FIREFOX_PROT
+      - VNC_LISTENING_PORT=-1
+    volumes:
+      - ./data/ebescher/config:/config:rw
+    ports:
+      - $FIREFOX_PROT:$FIREFOX_PROT
+    network_mode: service:tun2socks
+
+  Repocket:
+    image: repocket/repocket:latest
+    restart: always
+    environment:
+      - RP_EMAIL=$REPOCKET_EMAIL
+      - RP_API_KEY=$REPOCKET_API_KEY
+    network_mode: service:tun2socks
+
+  TraffMonetizer:
+    image: traffmonetizer/cli_v2:latest
+    restart: always
+    command: start accept --token ${TRAFFMONETIZER_TOKEN}
+    network_mode: service:tun2socks
+
+  tun2socks:
+      image: xjasonlyu/tun2socks
+      restart: always
+      command: ["/bin/sh", "-c", "echo 'nameserver 1.1.1.1\nnameserver 8.8.8.8' > /etc/resolv.conf && ip rule add iif lo ipproto udp dport 53 lookup main && ip rule add iif lo ipproto udp dport 3478 lookup main"]
+      environment:
+          - LOGLEVEL=info
+          - PROXY=$PROXY
+      volumes:
+          - '/dev/net/tun:/dev/net/tun'
+      cap_add:
+          - NET_ADMIN
