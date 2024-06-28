@@ -35,7 +35,7 @@ services:
     image: jlesage/firefox:latest
     restart: always
     environment:
-      - FF_OPEN_URL=https://adnade.net/ptp/?user=$ADNADE_USERNAME
+      - FF_OPEN_URL=https://adnade.net/view.php?multi=4&user=$ADNADE_USERNAME
       - WEB_LISTENING_PORT=$FIREFOX_PROT
       - VNC_LISTENING_PORT=-1
     volumes:
@@ -46,21 +46,32 @@ services:
       share_traffic:
         ipv4_address: 172.106.0.20
 
-  # mysterium:
-  #   image: mysteriumnetwork/myst:latest
-  #   restart: always
-  #   environment:
-  #     - MYSTNODE_DUMMY=$MYSTNODE_API_KEY
-  #   command: service --agreed-terms-and-conditions
-  #   cap_add:
-  #     - NET_ADMIN
-  #   ports:
-  #     - 4449:4449
-  #   volumes:
-  #     - ./data/mysterium-node:/var/lib/mysterium-node
-  #   networks:
-  #     share_traffic:
-  #       ipv4_address: 172.106.0.30
+  grass:
+    image: mrcolorrain/grass
+    restart: always
+    hostname: $DEVICE_NAME
+    environment:
+      - GRASS_USER=$GRASS_USER
+      - GRASS_PASS=$GRASS_PASS
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.30
+
+  mysterium:
+    image: mysteriumnetwork/myst:latest
+    restart: always
+    environment:
+      - MYSTNODE_DUMMY=$MYSTNODE_API_KEY
+    command: service --agreed-terms-and-conditions
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 4449:4449
+    volumes:
+      - ./data/mysterium-node:/var/lib/mysterium-node
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.40
 
   Repocket:
     image: repocket/repocket:latest
@@ -70,7 +81,7 @@ services:
       - RP_API_KEY=$REPOCKET_API_KEY
     networks:
       share_traffic:
-        ipv4_address: 172.106.0.40
+        ipv4_address: 172.106.0.50
 
   TraffMonetizer:
     image: traffmonetizer/cli_v2:latest
@@ -78,7 +89,7 @@ services:
     command: start accept --token ${TRAFFMONETIZER_TOKEN}
     networks:
       share_traffic:
-        ipv4_address: 172.106.0.50
+        ipv4_address: 172.106.0.60
 
 networks:
     share_traffic:

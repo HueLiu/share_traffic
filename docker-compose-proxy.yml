@@ -33,13 +33,22 @@ services:
     image: jlesage/firefox:latest
     restart: always
     environment:
-      - FF_OPEN_URL=https://adnade.net/ptp/?user=$ADNADE_USERNAME
+      - FF_OPEN_URL=https://adnade.net/view.php?multi=4&user=$ADNADE_USERNAME
       - WEB_LISTENING_PORT=$FIREFOX_PROT
       - VNC_LISTENING_PORT=-1
     volumes:
       - ./data/ebescher/config:/config:rw
     ports:
       - $FIREFOX_PROT:$FIREFOX_PROT
+    network_mode: service:tun2socks
+
+  grass:
+    image: mrcolorrain/grass
+    restart: always
+    hostname: $DEVICE_NAME
+    environment:
+      - GRASS_USER=$GRASS_USER
+      - GRASS_PASS=$GRASS_PASS
     network_mode: service:tun2socks
 
   Repocket:

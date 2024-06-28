@@ -17,12 +17,12 @@ docker compose --compatibility up -d
 | [EarnFM](https://earn.fm/ref/HARLTZI0)  | :heavy_check_mark:   | :x: |Unlimited|1|
 | [Ebesucher](https://www.ebesucher.com/?ref=harley123) | :heavy_check_mark:   | :heavy_check_mark: |Unlimited|Unlimited|
 | [GagaNode](https://dashboard.gaganode.com/register?referral_code=oxqgwukujzebwyk) | :heavy_check_mark:   | :heavy_check_mark: |No limit|1|
+| [Grass](https://app.getgrass.io/register/?referralCode=hfJmyYVZSBOSdbO) | :heavy_check_mark:   | :heavy_check_mark: |No limit|Unlimited|
 | [HoneyGain](https://r.honeygain.me/LH183E74C1) | :heavy_check_mark:   | :x: |10|1|
 | [IPROYAL](https://pawns.app/?r=1899592)  | :heavy_check_mark:   | :x: |Unlimited|1|
 | [MesonNetwork](https://dashboard.meson.network/register) | :heavy_check_mark:   | :heavy_check_mark: |No limit|1|
 | [Mysterium](https://mystnodes.com/)  | :heavy_check_mark:   | :x: |Unlimited|1|
 | [PACKETSTREAM](https://packetstream.io/?psr=4XJi)  | :heavy_check_mark:   | :x: |Unlimited|1|
-| [PEER2PROFIT](https://t.me/peer2profit_app_bot?start=1684930804646e00f4531f1)  | :heavy_check_mark:   | :heavy_check_mark:  | Unlimited|Unlimited|
 | [PROXYLITE](https://proxylite.ru/?r=GNGSGWU5) | :heavy_check_mark:   | :heavy_check_mark: |Unlimited|1|
 | [PROXYRACK](https://peer.proxyrack.com/ref/ccjrpmxxxkmecq4dakv2higoqncl97zf2nicekhi)  | :heavy_check_mark:   | :heavy_check_mark: |500|1|
 | [REPOCKET](https://link.repocket.co/WE1G)  | :heavy_check_mark:   | :heavy_check_mark: |Unlimited|2|
@@ -35,6 +35,7 @@ docker compose --compatibility up -d
 - [Cash Raven](https://cashraven.io/) mobile only
 - [CryptoProxy(code:PE31212G)](https://cryptoproxy.online/) mobile only
 - [PACKETShare](https://www.packetshare.io/?code=7083EC2781EF13D2) mobile and windows only
+- [PEER2PROFIT](https://t.me/peer2profit_app_bot?start=1684930804646e00f4531f1) Dashboard on telegram
 - [Pi](https://minepi.com) mobile only
 - [Salad(Use code WM5ZHG)](https://salad.com/) windows only
 - [SpiderIncome](https://income.spider.dev/auth/signin) cannot register now

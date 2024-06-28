@@ -1,7 +1,7 @@
-FROM ubuntu:latest
+FROM ubuntu:22.04
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install sudo vim python-is-python3 supervisor unzip tar curl wget -y
+RUN apt-get install sudo vim python-is-python3 supervisor unzip tar curl wget netcat -y
 RUN apt-get install ca-certificates dos2unix -y
 RUN apt-get install xvfb procps -y
 RUN apt-get update && apt-get install nodejs -y
@@ -13,9 +13,9 @@ RUN curl https://bitping.com/install.sh | bash
 
 # CloudCollab
 # docker exec <container id> cat /root/.config/CloudCollab/deviceid | od -A n -v -t x1 | tr -d  ' '
-RUN mkdir /opt/cloudcollab
-RUN wget -O cloudcollab https://update.cloudcollab.uk/versions/CloudCollab-0.0.3-x64
-RUN mv ./cloudcollab /opt/cloudcollab/cloudcollab
+# RUN mkdir /opt/cloudcollab
+# RUN wget -O cloudcollab https://update.cloudcollab.uk/versions/CloudCollab-0.0.3-x64
+# RUN mv ./cloudcollab /opt/cloudcollab/cloudcollab
 
 # EarnApp
 RUN mkdir /opt/earnapp
@@ -32,9 +32,9 @@ RUN mkdir /opt/earnfm
 COPY ./sh/earnfm/ /opt/earnfm/
 
 # GagaNode
-RUN wget -P /opt https://assets.coreservice.io/public/package/60/app-market-gaga-pro/1.0.4/app-market-gaga-pro-1_0_4.tar.gz
-RUN cd /opt && tar -zxf app-market-gaga-pro-1_0_4.tar.gz && rm -f app-market-gaga-pro-1_0_4.tar.gz
-RUN mv /opt/apphub-linux-amd64 /opt/gaganode
+RUN wget -P /opt https://assets.coreservice.io/public/package/65/gaganode_pro/0.0.300/gaganode_pro-0_0_300.tar.gz
+RUN cd /opt && tar -zxf gaganode_pro-0_0_300.tar.gz && rm -f gaganode_pro-0_0_300.tar.gz
+RUN mv /opt/gaganode-linux-386 /opt/gaganode
 COPY ./sh/gaganode/ /opt/gaganode/
 
 # Honeygain
@@ -70,9 +70,9 @@ COPY ./sh/packetstream/pslauncher /usr/local/bin
 ENV PS_IS_DOCKER=true
 
 # Peer2profit
-RUN mkdir /opt/peer2profit
-COPY ./sh/peer2profit/ /opt/peer2profit
-RUN cd /opt/peer2profit && apt-get install -y ./peer2profit_0.48_amd64.deb
+# RUN mkdir /opt/peer2profit
+# COPY ./sh/peer2profit/ /opt/peer2profit
+# RUN cd /opt/peer2profit && apt-get install -y ./peer2profit_0.48_amd64.deb
 
 # Proxylite
 RUN mkdir /opt/proxylite
