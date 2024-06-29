@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "playwright": "^1.45.0",
+    "pm2": "^5.4.1"
+  },
+  "name": "adnade",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Hue Liu",
+  "license": "MIT",
+  "private": true,
+  "type": "module"
+}

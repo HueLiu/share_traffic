@@ -1,6 +1,11 @@
 version: "3"
 services:
   share_traffic:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
     image: "harleyliu/share_traffic:latest"
     build: .
     tty: true
@@ -31,22 +36,28 @@ services:
       share_traffic:
         ipv4_address: 172.106.0.10
 
-  firefox:
-    image: jlesage/firefox:latest
+  adnade:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
+    image: harleyliu/adnade:latest
     restart: always
     environment:
-      - FF_OPEN_URL=https://adnade.net/view.php?multi=4&user=$ADNADE_USERNAME
-      - WEB_LISTENING_PORT=$FIREFOX_PROT
-      - VNC_LISTENING_PORT=-1
-    volumes:
-      - ./data/ebescher/config:/config:rw
-    ports:
-      - $FIREFOX_PROT:$FIREFOX_PROT
+      - ADNADE_USERNAME=$ADNADE_USERNAME
+      - PROXY_LIST=$ADNADE_PROXY_LIST
+      - PROXY_AUTH_LIST=$ADNADE_PROXY_AUTH_LIST
     networks:
       share_traffic:
         ipv4_address: 172.106.0.20
 
   grass:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 100M
     image: mrcolorrain/grass
     restart: always
     hostname: $DEVICE_NAME
@@ -57,23 +68,33 @@ services:
       share_traffic:
         ipv4_address: 172.106.0.30
 
-  mysterium:
-    image: mysteriumnetwork/myst:latest
-    restart: always
-    environment:
-      - MYSTNODE_DUMMY=$MYSTNODE_API_KEY
-    command: service --agreed-terms-and-conditions
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 4449:4449
-    volumes:
-      - ./data/mysterium-node:/var/lib/mysterium-node
-    networks:
-      share_traffic:
-        ipv4_address: 172.106.0.40
+  # mysterium:
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.1'
+  #         memory: 100M
+  #   image: mysteriumnetwork/myst:latest
+  #   restart: always
+  #   environment:
+  #     - MYSTNODE_DUMMY=$MYSTNODE_API_KEY
+  #   command: service --agreed-terms-and-conditions
+  #   cap_add:
+  #     - NET_ADMIN
+  #   ports:
+  #     - 4449:4449
+  #   volumes:
+  #     - ./data/mysterium-node:/var/lib/mysterium-node
+  #   networks:
+  #     share_traffic:
+  #       ipv4_address: 172.106.0.40
 
   Repocket:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
     image: repocket/repocket:latest
     restart: always
     environment:
@@ -84,12 +105,29 @@ services:
         ipv4_address: 172.106.0.50
 
   TraffMonetizer:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
     image: traffmonetizer/cli_v2:latest
     restart: always
     command: start accept --token ${TRAFFMONETIZER_TOKEN}
     networks:
       share_traffic:
         ipv4_address: 172.106.0.60
+
+  dockerUI:
+    image: joinsunsoft/docker.ui:latest
+    restart: always
+    ports:
+      - 8999:8999
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      share_traffic:
+        ipv4_address: 172.106.0.70
+
 
 networks:
     share_traffic:

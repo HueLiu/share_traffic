@@ -1,6 +1,11 @@
 version: "3"
 services:
   share_traffic:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
     image: "harleyliu/share_traffic:latest"
     build: .
     tty: true
@@ -29,20 +34,28 @@ services:
       - ./data/bitping:/root/.bitping
     network_mode: service:tun2socks
 
-  firefox:
-    image: jlesage/firefox:latest
+  adnade:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
+    image: harleyliu/adnade:latest
     restart: always
     environment:
-      - FF_OPEN_URL=https://adnade.net/view.php?multi=4&user=$ADNADE_USERNAME
-      - WEB_LISTENING_PORT=$FIREFOX_PROT
-      - VNC_LISTENING_PORT=-1
+      - ADNADE_USERNAME=$ADNADE_USERNAME
+      - PROXY_LIST=$ADNADE_PROXY_LIST
+      - PROXY_AUTH_LIST=$ADNADE_PROXY_AUTH_LIST
     volumes:
-      - ./data/ebescher/config:/config:rw
-    ports:
-      - $FIREFOX_PROT:$FIREFOX_PROT
+      - ./data/adnade:/app/screenshot
     network_mode: service:tun2socks
 
   grass:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 100M
     image: mrcolorrain/grass
     restart: always
     hostname: $DEVICE_NAME
@@ -52,6 +65,11 @@ services:
     network_mode: service:tun2socks
 
   Repocket:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
     image: repocket/repocket:latest
     restart: always
     environment:
@@ -60,9 +78,23 @@ services:
     network_mode: service:tun2socks
 
   TraffMonetizer:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
     image: traffmonetizer/cli_v2:latest
     restart: always
     command: start accept --token ${TRAFFMONETIZER_TOKEN}
+    network_mode: service:tun2socks
+
+  dockerUI:
+    image: joinsunsoft/docker.ui:latest
+    restart: always
+    ports:
+      - 8999:8999
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     network_mode: service:tun2socks
 
   tun2socks:
